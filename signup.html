@@ -12,28 +12,28 @@
 <body>
     <!--For log in html-->
   <div class="signup">
-    <form action="">
+    <form name="registeruser" id="register-form">
     <h1>Signup</h1>
 
     <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input type="text" name="username" placeholder="Username" required>
         <i class="bx bxs-user"></i>
     </div>
  
     <div class="input-box">
-        <input type="email" placeholder="email" required>
+        <input type="email" name="email" placeholder="email" required>
         <i class='bx bxs-lock-alt'></i>
     </div>
 
     <div class="confirm-password">
         <div class="input-box">
             <div class="input-wrapper">
-                <input type="password" placeholder="password" required>
+                <input type="password"  name="password" placeholder="password" required>
                 <i class='bx bxs-lock-open-alt'></i>
             </div>
     
             <div class="input-wrapper">
-                <input type="password" placeholder="confirm" required>
+                <input type="password" name="confi" placeholder="confirm" required>
                 <i class='bx bxs-lock-alt'></i>
             </div>
         </div>
@@ -47,4 +47,35 @@
    </form>
   </div>
 </body>
+<!--For connecting the database-->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const { createClient } = supabase
+// Create a single supabase client for interacting with your database
+ supabase = createClient('https://uvfmajozulghywibxtlc.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2Zm1ham96dWxnaHl3aWJ4dGxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg5MTA0ODMsImV4cCI6MjA1NDQ4NjQ4M30.2N9NG70pKPu4Xm-YyIGZ6dnCzpBz2EbX7kHgcOAk9vA')
+
+
+ //for form inserting data
+const form = document.querySelector('#register-form')
+form.addEventListener('submit', async(event) =>{
+   event.preventDefault()
+   
+   const formInputs = form.querySelectorAll('input')
+ 
+   let submission = {}
+   //loop to get elements of each data
+   formInputs.forEach(element =>{
+    const {value, name}= element
+    if (value){
+        submission[name] = value
+    }
+   })
+   console.log(submission) //use to check if the data is correct in the console log of the system
+
+   //use to pass the data into supabase database
+                      //table name
+   const {error, data} = await supabase.from('userid').insert([submission])
+   console.log({error,data})
+})
+</script>
 </html>
